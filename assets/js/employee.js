@@ -52,13 +52,13 @@ const EMP = (() => {
     $("#deedRows").innerHTML = list.map((d) => {
       const st = Store.statusOf(d);
       return `<tr class="clickable" onclick="EMP.open('${d.id}')">
-        <td class="mono t-strong">${d.id}</td>
-        <td><div class="t-strong">${d.mosque}</div><div class="t-sub">${d.city}</div></td>
-        <td>${d.district || "—"}</td>
-        <td><span class="small">${d.step >= DataGen.STEP_COUNT ? "✅ " : `(${d.step + 1}/${DataGen.STEP_COUNT}) `}${currentStepName(d)}</span></td>
-        <td>${progressHTML(Store.pctOf(d))}</td>
-        <td>${badgeHTML(st)}</td>
-        <td><button class="btn sm primary">فتح ↵</button></td>
+        <td data-label="رقم الصك" class="mono t-strong">${d.id}</td>
+        <td data-label="المسجد / الجهة"><div class="t-strong">${d.mosque}</div><div class="t-sub">${d.city}</div></td>
+        <td data-label="الحي">${d.district || "—"}</td>
+        <td data-label="المرحلة الحالية"><span class="small">${d.step >= DataGen.STEP_COUNT ? "✅ " : `(${d.step + 1}/${DataGen.STEP_COUNT}) `}${currentStepName(d)}</span></td>
+        <td data-label="التقدّم">${progressHTML(Store.pctOf(d))}</td>
+        <td data-label="الحالة">${badgeHTML(st)}</td>
+        <td data-label=""><button class="btn sm primary">فتح ↵</button></td>
       </tr>`;
     }).join("") || `<tr><td colspan="7"><div class="empty"><div class="em-ic">📭</div>لا توجد صكوك بهذا التصنيف</div></td></tr>`;
     $("#countInfo").textContent = `${fmt(list.length)} صك`;

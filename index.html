@@ -35,12 +35,20 @@
     .role-card.sel .r-check { opacity: 1; }
     .ctx-picker { margin-top: 4px; }
     .foot-note { text-align: center; margin-top: 18px; color: var(--muted); font-size: .78rem; }
+    @media (max-width: 480px) {
+      .login-wrap { padding: 16px; }
+      .login-brand img { width: 76px; height: 76px; }
+      .login-brand h1 { font-size: 1.35rem; }
+      .login-brand .min { font-size: .9rem; }
+      .role-card { padding: 13px; gap: 11px; }
+      .role-card .r-ic { width: 42px; height: 42px; font-size: 1.2rem; }
+    }
   </style>
 </head>
 <body>
   <div class="login-wrap">
     <div class="login-brand">
-      <img src="assets/img/logo.svg" alt="شعار الوزارة" />
+      <img src="assets/img/logo.png" alt="شعار الوزارة" onerror="this.onerror=null;this.src='assets/img/logo.svg'" />
       <div class="min">وزارة الشؤون الإسلامية والدعوة والإرشاد</div>
       <h1>نظام متابعة الصكوك</h1>
       <div class="sub">توثيق ومتابعة صكوك المساجد على مستوى الفروع</div>

@@ -86,16 +86,16 @@ const HQ = (() => {
     $("#branchRows").innerHTML = list.map((b) => {
       const s = Store.branchStats(b.id);
       return `<tr class="clickable" onclick="HQ.openBranch('${b.id}')">
-        <td><div class="cell-branch"><div class="branch-ic">${b.code}</div>
+        <td data-label="الفرع"><div class="cell-branch"><div class="branch-ic">${b.code}</div>
           <div><div class="t-strong">${b.name}</div><div class="t-sub">${Store.employeesOf(b.id).length} موظفين</div></div></div></td>
-        <td>${b.city}</td>
-        <td class="mono t-strong">${fmt(s.total)}</td>
-        <td class="mono" style="color:var(--st-done)">${fmt(s.done)}</td>
-        <td class="mono" style="color:var(--st-prog)">${fmt(s.prog)}</td>
-        <td class="mono" style="color:var(--st-idle)">${fmt(s.idle)}</td>
-        <td class="mono muted">${fmt(s.new)}</td>
-        <td>${progressHTML(s.activePct)}</td>
-        <td><button class="btn sm ghost">عرض ↵</button></td>
+        <td data-label="المدينة">${b.city}</td>
+        <td data-label="إجمالي الصكوك" class="mono t-strong">${fmt(s.total)}</td>
+        <td data-label="منتهٍ" class="mono" style="color:var(--st-done)">${fmt(s.done)}</td>
+        <td data-label="جارٍ" class="mono" style="color:var(--st-prog)">${fmt(s.prog)}</td>
+        <td data-label="خامل" class="mono" style="color:var(--st-idle)">${fmt(s.idle)}</td>
+        <td data-label="غير موزّع" class="mono muted">${fmt(s.new)}</td>
+        <td data-label="نسبة الإنجاز">${progressHTML(s.activePct)}</td>
+        <td data-label=""><button class="btn sm ghost">عرض ↵</button></td>
       </tr>`;
     }).join("") || `<tr><td colspan="9"><div class="empty"><div class="em-ic">🔍</div>لا توجد نتائج مطابقة</div></td></tr>`;
   }
@@ -111,13 +111,13 @@ const HQ = (() => {
       const list = Store.deedsOfEmployee(e.id);
       const es = Store.statsFor(list);
       return `<tr>
-        <td><div class="cell-branch"><div class="branch-ic">${initials(e.name)}</div>
+        <td data-label="الموظف"><div class="cell-branch"><div class="branch-ic">${initials(e.name)}</div>
           <div><div class="t-strong">${e.name}</div><div class="t-sub">${e.role}</div></div></div></td>
-        <td class="mono t-strong">${fmt(es.total)}</td>
-        <td class="mono" style="color:var(--st-done)">${fmt(es.done)}</td>
-        <td class="mono" style="color:var(--st-prog)">${fmt(es.prog)}</td>
-        <td class="mono" style="color:var(--st-idle)">${fmt(es.idle)}</td>
-        <td style="min-width:150px">${progressHTML(es.activePct)}</td>
+        <td data-label="إجمالي" class="mono t-strong">${fmt(es.total)}</td>
+        <td data-label="منتهٍ" class="mono" style="color:var(--st-done)">${fmt(es.done)}</td>
+        <td data-label="جارٍ" class="mono" style="color:var(--st-prog)">${fmt(es.prog)}</td>
+        <td data-label="خامل" class="mono" style="color:var(--st-idle)">${fmt(es.idle)}</td>
+        <td data-label="نسبة الإنجاز" style="min-width:150px">${progressHTML(es.activePct)}</td>
       </tr>`;
     }).join("");
 

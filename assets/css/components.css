@@ -222,3 +222,75 @@ table.data .t-sub { font-size: .78rem; color: var(--muted); }
 }
 .toast.show { transform: translateX(50%) translateY(0); }
 .toast.ok { background: var(--st-done); }
+
+/* ==========================================================================
+   الاستجابة للشاشات (Responsive) — المكوّنات
+   ========================================================================== */
+
+/* رؤوس البطاقات وأشرطة الأدوات تلتفّ على الشاشات الصغيرة */
+@media (max-width: 900px) {
+  .card-head { flex-wrap: wrap; }
+  .card-head .toolbar { width: 100%; }
+  .card-head .search { width: 100%; }
+}
+
+/* المخطط الشريطي للفروع */
+@media (max-width: 640px) {
+  .bar-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "name total" "track track";
+    gap: 5px 10px;
+  }
+  .bar-row .b-name { grid-area: name; }
+  .bar-row .b-total { grid-area: total; }
+  .bar-track { grid-area: track; }
+}
+
+/* النوافذ المنبثقة تصبح ملء الشاشة على الهاتف */
+@media (max-width: 700px) {
+  .modal-backdrop { padding: 0; align-items: stretch; }
+  .modal, .modal.wide {
+    max-width: 100%; min-height: 100vh; border-radius: 0;
+    display: flex; flex-direction: column;
+  }
+  .modal-body { max-height: none; flex: 1; padding: 16px; }
+  .modal-head { padding: 14px 16px; }
+  .modal-foot { padding: 14px 16px; flex-wrap: wrap; }
+  .modal-foot .btn { flex: 1; }
+}
+
+/* ---------- تحويل الجداول إلى بطاقات على الهاتف ---------- */
+@media (max-width: 700px) {
+  table.data thead { display: none; }
+  table.data, table.data tbody { display: block; width: 100%; }
+  table.data tr {
+    display: block; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 12px;
+    padding: 6px 14px; margin-bottom: 10px; box-shadow: var(--shadow-sm);
+  }
+  table.data tbody tr:hover { background: var(--surface); }
+  table.data tbody td {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; padding: 9px 0; border: 0;
+    border-bottom: 1px dashed var(--line); text-align: start;
+  }
+  table.data tbody tr td:last-child { border-bottom: 0; }
+  table.data tbody td::before {
+    content: attr(data-label); font-weight: 700; color: var(--muted);
+    font-size: .8rem; flex-shrink: 0; text-align: start;
+  }
+  /* الخلايا بدون عنوان (أزرار، اختيار) تمتد بعرض كامل */
+  table.data tbody td[data-label=""] { justify-content: stretch; }
+  table.data tbody td[data-label=""]::before { content: none; }
+  table.data tbody td[data-label=""] .btn { width: 100%; }
+  table.data .progress { min-width: 130px; }
+  table.data .cell-branch { justify-content: flex-end; }
+}
+
+/* شريط الإسناد الجماعي في لوحة الفرع */
+@media (max-width: 640px) {
+  #bulkBar { flex-direction: column; align-items: stretch; gap: 10px; }
+  #bulkBar .row { flex-direction: column; align-items: stretch; }
+  #bulkBar select, #bulkBar .btn { width: 100%; }
+  .toolbar .search { min-width: 0; width: 100%; }
+}

@@ -37,14 +37,14 @@ const BR = (() => {
     $("#teamRows").innerHTML = emps.map((e) => {
       const es = Store.statsFor(Store.deedsOfEmployee(e.id));
       return `<tr>
-        <td><div class="cell-branch"><div class="branch-ic">${initials(e.name)}</div>
+        <td data-label="الموظف"><div class="cell-branch"><div class="branch-ic">${initials(e.name)}</div>
           <div class="t-strong">${e.name}</div></div></td>
-        <td>${e.role}</td>
-        <td class="mono t-strong">${fmt(es.total)}</td>
-        <td class="mono" style="color:var(--st-done)">${fmt(es.done)}</td>
-        <td class="mono" style="color:var(--st-prog)">${fmt(es.prog)}</td>
-        <td class="mono" style="color:var(--st-idle)">${fmt(es.idle)}</td>
-        <td style="min-width:150px">${progressHTML(es.activePct)}</td>
+        <td data-label="الدور">${e.role}</td>
+        <td data-label="إجمالي" class="mono t-strong">${fmt(es.total)}</td>
+        <td data-label="منتهٍ" class="mono" style="color:var(--st-done)">${fmt(es.done)}</td>
+        <td data-label="جارٍ" class="mono" style="color:var(--st-prog)">${fmt(es.prog)}</td>
+        <td data-label="خامل" class="mono" style="color:var(--st-idle)">${fmt(es.idle)}</td>
+        <td data-label="نسبة الإنجاز" style="min-width:150px">${progressHTML(es.activePct)}</td>
       </tr>`;
     }).join("");
   }
@@ -69,15 +69,15 @@ const BR = (() => {
       const st = Store.statusOf(d);
       const emp = d.assignedEmployeeId ? Store.employee(d.assignedEmployeeId) : null;
       return `<tr>
-        <td><input type="checkbox" class="rowChk" value="${d.id}" ${selected.has(d.id) ? "checked" : ""} onclick="BR.toggleRow('${d.id}',this)"></td>
-        <td class="mono t-strong">${d.id}</td>
-        <td><div class="t-strong">${d.mosque}</div><div class="t-sub">${d.city}</div></td>
-        <td>${d.district || "—"}</td>
-        <td>${emp ? `<div class="cell-branch"><div class="branch-ic" style="width:28px;height:28px;font-size:.72rem">${initials(emp.name)}</div>${emp.name}</div>`
+        <td data-label="تحديد"><input type="checkbox" class="rowChk" value="${d.id}" ${selected.has(d.id) ? "checked" : ""} onclick="BR.toggleRow('${d.id}',this)"></td>
+        <td data-label="رقم الصك" class="mono t-strong">${d.id}</td>
+        <td data-label="المسجد / الجهة"><div class="t-strong">${d.mosque}</div><div class="t-sub">${d.city}</div></td>
+        <td data-label="الحي">${d.district || "—"}</td>
+        <td data-label="الموظف المسؤول">${emp ? `<div class="cell-branch"><div class="branch-ic" style="width:28px;height:28px;font-size:.72rem">${initials(emp.name)}</div>${emp.name}</div>`
                   : `<button class="btn sm gold" onclick="BR.openAssign('${d.id}')">إسناد لموظف</button>`}</td>
-        <td>${badgeHTML(st)}</td>
-        <td>${progressHTML(Store.pctOf(d))}</td>
-        <td class="t-sub">${timeAgo(d.updatedAt)}</td>
+        <td data-label="الحالة">${badgeHTML(st)}</td>
+        <td data-label="التقدّم">${progressHTML(Store.pctOf(d))}</td>
+        <td data-label="آخر تحديث" class="t-sub">${timeAgo(d.updatedAt)}</td>
       </tr>`;
     }).join("") || `<tr><td colspan="8"><div class="empty"><div class="em-ic">📭</div>لا توجد صكوك بهذا التصنيف</div></td></tr>`;
 

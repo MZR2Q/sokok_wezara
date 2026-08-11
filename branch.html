@@ -11,8 +11,9 @@
 </head>
 <body>
   <header class="app-header">
+    <button class="hamburger" id="navToggle" aria-label="القائمة"><span></span><span></span><span></span></button>
     <div class="brand-lockup">
-      <img src="assets/img/logo.svg" alt="شعار الوزارة" />
+      <img src="assets/img/logo.png" alt="شعار الوزارة" onerror="this.onerror=null;this.src='assets/img/logo.svg'" />
       <div class="brand-text"><b>وزارة الشؤون الإسلامية</b><span>والدعوة والإرشاد</span></div>
     </div>
     <div class="sys-name">نظام متابعة الصكوك</div>
@@ -25,7 +26,8 @@
   </header>
 
   <div class="app-shell">
-    <aside class="sidebar">
+    <div class="nav-overlay" id="navOverlay"></div>
+    <aside class="sidebar" id="sidebar">
       <div class="side-label">القائمة</div>
       <a class="side-link active"><span class="ic">📋</span> صكوك الفرع</a>
       <a class="side-link" onclick="BR.filterTab('new')"><span class="ic">📥</span> بانتظار التوزيع

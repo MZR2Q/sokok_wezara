@@ -103,6 +103,25 @@ function wireModalClose() {
 /* قراءة معطى من الرابط */
 function qs(name) { return new URLSearchParams(location.search).get(name); }
 
+/* التنقل على الجوال: فتح/إغلاق الدرج الجانبي */
+function wireMobileNav() {
+  const toggle = $("#navToggle");
+  const sidebar = $("#sidebar");
+  const overlay = $("#navOverlay");
+  if (!toggle || !sidebar) return;
+  const set = (open) => {
+    sidebar.classList.toggle("open", open);
+    overlay?.classList.toggle("open", open);
+    toggle.classList.toggle("open", open);
+    document.body.style.overflow = open ? "hidden" : "";
+  };
+  toggle.addEventListener("click", () => set(!sidebar.classList.contains("open")));
+  overlay?.addEventListener("click", () => set(false));
+  /* إغلاق الدرج عند اختيار أي رابط منه */
+  $$("#sidebar .side-link").forEach((l) => l.addEventListener("click", () => set(false)));
+}
+document.addEventListener("DOMContentLoaded", wireMobileNav);
+
 /* حماية بسيطة من الوصول بدون جلسة */
 function guard(role) {
   const s = Store.session();

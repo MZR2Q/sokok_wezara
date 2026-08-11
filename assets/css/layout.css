@@ -102,11 +102,73 @@
 .stat-grid { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
 .cols-2 { grid-template-columns: 1.6fr 1fr; }
 
+/* ---------- زر القائمة (الهامبرغر) وطبقة التعتيم ---------- */
+.hamburger {
+  display: none;
+  flex-direction: column; justify-content: center; gap: 4px;
+  width: 40px; height: 40px; border: 0; border-radius: 10px;
+  background: rgba(255,255,255,.14); cursor: pointer; flex-shrink: 0;
+}
+.hamburger span { display: block; width: 18px; height: 2px; background: #fff; border-radius: 2px; margin-inline: auto; transition: .2s; }
+.hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+.nav-overlay {
+  display: none;
+  position: fixed; inset: var(--header-h) 0 0 0;
+  background: rgba(16, 36, 26, .45); z-index: 45; backdrop-filter: blur(1px);
+}
+.nav-overlay.open { display: block; }
+
+/* ==========================================================================
+   الاستجابة للشاشات (Responsive)
+   ========================================================================== */
 @media (max-width: 1000px) {
   .cols-2 { grid-template-columns: 1fr; }
 }
-@media (max-width: 780px) {
-  .sidebar { display: none; }
-  .main { padding: 16px; }
-  .app-header .brand-text span { display: none; }
+
+/* أجهزة لوحية وأصغر: تحويل القائمة الجانبية إلى درج منزلق (على اليمين في RTL) */
+@media (max-width: 900px) {
+  .hamburger { display: flex; }
+  .sidebar {
+    position: fixed; top: var(--header-h); bottom: 0;
+    inset-inline-start: 0;                 /* الحافة اليمنى في واجهة RTL */
+    width: 82vw; max-width: 300px; height: calc(100vh - var(--header-h));
+    transform: translateX(100%);           /* مخفيّة خارج الشاشة يميناً */
+    transition: transform .26s ease; z-index: 50;
+    box-shadow: -6px 0 30px rgba(16,36,26,.22);
+    border-inline-start: 0; border-inline-end: 1px solid var(--line);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .main { padding: 18px; }
+}
+
+/* هواتف */
+@media (max-width: 640px) {
+  :root { --header-h: 58px; }
+  .app-header { gap: 8px; padding-inline: 10px; }
+  .app-header .brand-lockup img { width: 32px; height: 32px; }
+  .app-header .brand-text { display: none; }
+  .app-header .sys-name {
+    margin-inline-start: 0; padding-inline-start: 0; border-inline-start: 0;
+    font-size: .95rem; font-weight: 800;
+  }
+  .header-user { background: transparent; padding: 2px; gap: 0; }
+  .header-user .avatar { width: 30px; height: 30px; }
+  .header-user .u-meta { display: none; }
+  .btn-logout { padding: 8px 10px; font-size: .82rem; }
+
+  .main { padding: 14px 12px; }
+  .page-head { margin-bottom: 16px; }
+  .page-head h1 { font-size: 1.25rem; }
+  .page-head p { font-size: .88rem; }
+
+  .grid { gap: 12px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+}
+
+/* هواتف صغيرة جداً */
+@media (max-width: 360px) {
+  .stat-grid { grid-template-columns: 1fr; }
 }
