@@ -23,14 +23,15 @@ const EMP = (() => {
     $("#navProg").textContent = s.prog;
     $("#navIdle").textContent = s.idle;
     const cards = [
-      ["st-total","📜",s.total,"إجمالي المسند إليّ"],
-      ["st-done","✅",s.done,"منتهية"],
-      ["st-prog","⏳",s.prog,"جارٍ العمل"],
-      ["st-idle","💤",s.idle,"لم تبدأ"],
+      ["st-total","file",s.total,"إجمالي المسند إليّ"],
+      ["st-done","checkCircle",s.done,"منتهية"],
+      ["st-prog","clock",s.prog,"جارٍ العمل"],
+      ["st-idle","moon",s.idle,"لم تبدأ"],
     ];
-    $("#statCards").innerHTML = cards.map(([c,ic,v,l]) => `
-      <div class="stat ${c}"><div class="st-top"><div class="st-ic">${ic}</div></div>
-        <div class="st-value mono">${fmt(v)}</div><div class="st-label">${l}</div></div>`).join("");
+    $("#statCards").innerHTML = cards.map(([c,ic,v,l],i) => `
+      <div class="stat ${c} reveal" style="--i:${i}"><div class="st-top"><div class="st-ic">${icon(ic,22)}</div></div>
+        <div class="st-value mono" data-count="${v}">0</div><div class="st-label">${l}</div></div>`).join("");
+    animateCounters($("#statCards"));
   }
 
   function filtered() {
@@ -49,18 +50,19 @@ const EMP = (() => {
 
   function renderDeeds() {
     const list = filtered();
-    $("#deedRows").innerHTML = list.map((d) => {
+    $("#deedRows").innerHTML = list.map((d, i) => {
       const st = Store.statusOf(d);
-      return `<tr class="clickable" onclick="EMP.open('${d.id}')">
+      const doneAll = d.step >= DataGen.STEP_COUNT;
+      return `<tr class="clickable reveal-row" style="--i:${i}" onclick="EMP.open('${d.id}')">
         <td data-label="رقم الصك" class="mono t-strong">${d.id}</td>
         <td data-label="المسجد / الجهة"><div class="t-strong">${d.mosque}</div><div class="t-sub">${d.city}</div></td>
         <td data-label="الحي">${d.district || "—"}</td>
-        <td data-label="المرحلة الحالية"><span class="small">${d.step >= DataGen.STEP_COUNT ? "✅ " : `(${d.step + 1}/${DataGen.STEP_COUNT}) `}${currentStepName(d)}</span></td>
+        <td data-label="المرحلة الحالية"><span class="small">${doneAll ? "مكتمل" : `(${d.step + 1}/${DataGen.STEP_COUNT}) ${currentStepName(d)}`}</span></td>
         <td data-label="التقدّم">${progressHTML(Store.pctOf(d))}</td>
         <td data-label="الحالة">${badgeHTML(st)}</td>
-        <td data-label=""><button class="btn sm primary">فتح ↵</button></td>
+        <td data-label=""><button class="btn sm primary">${icon("arrow", 15)} فتح</button></td>
       </tr>`;
-    }).join("") || `<tr><td colspan="7"><div class="empty"><div class="em-ic">📭</div>لا توجد صكوك بهذا التصنيف</div></td></tr>`;
+    }).join("") || `<tr><td colspan="7"><div class="empty"><div class="em-ic">${icon("inbox", 34)}</div>لا توجد صكوك بهذا التصنيف</div></td></tr>`;
     $("#countInfo").textContent = `${fmt(list.length)} صك`;
   }
 
@@ -74,7 +76,7 @@ const EMP = (() => {
   function renderWF() {
     const d = Store.deed(currentDeed);
     const st = Store.statusOf(d);
-    $("#wfTitle").innerHTML = `🧾 توثيق الصك <span class="mono">${d.id}</span>`;
+    $("#wfTitle").innerHTML = `${icon("file", 20)} توثيق الصك <span class="mono">${d.id}</span>`;
 
     $("#wfInfo").innerHTML = `
       <div class="kv"><span class="k">المسجد / الجهة</span><span class="v">${d.mosque}</span></div>
@@ -88,7 +90,7 @@ const EMP = (() => {
     $("#wfSteps").innerHTML = wf.map((s, i) => {
       const cls = i < d.step ? "done" : i === d.step ? "current" : "";
       const hist = d.history.find((h) => h.step === i);
-      const node = i < d.step ? "✓" : (i + 1);
+      const node = i < d.step ? svgIcon("check", 16) : (i + 1);
       return `<div class="step ${cls}">
         <div class="st-line"></div>
         <div class="st-node">${node}</div>
@@ -108,13 +110,13 @@ const EMP = (() => {
     if (d.step >= DataGen.STEP_COUNT) {
       box.innerHTML = `
         <div class="center">
-          <div style="font-size:2.6rem">✅</div>
+          <div class="wf-done-badge">${icon("checkCircle", 34)}</div>
           <h3 class="mt-1">اكتمل توثيق الصك</h3>
           <p class="muted small mb-2">تم اعتماد الصك وإرفاق نسخته النهائية.</p>
-          <div class="tag-pill" style="justify-content:center">📎 ${d.finalFile}</div>
+          <div class="tag-pill" style="justify-content:center">${icon("clip", 14)} ${d.finalFile}</div>
         </div>
         <div class="divider"></div>
-        <button class="btn ghost block" onclick="EMP.revert()">↩︎ التراجع عن آخر خطوة</button>`;
+        <button class="btn ghost block" onclick="EMP.revert()">${icon("revert", 16)} التراجع عن آخر خطوة</button>`;
       return;
     }
     const step = WF()[d.step];
@@ -134,9 +136,9 @@ const EMP = (() => {
           <div class="small muted mt-1">في النموذج الأولي يكفي إدخال اسم الملف.</div>
         </div>` : ""}
       <button class="btn primary block mt-1" onclick="EMP.advance()">
-        ${isAttach ? "📎 إرفاق واعتماد نهائي" : "إنجاز الخطوة والمتابعة ←"}
+        ${isAttach ? `${icon("clip", 16)} إرفاق واعتماد نهائي` : `${icon("check", 16)} إنجاز الخطوة والمتابعة`}
       </button>
-      ${d.step > 0 ? `<button class="btn ghost block mt-1" onclick="EMP.revert()">↩︎ تراجع</button>` : ""}`;
+      ${d.step > 0 ? `<button class="btn ghost block mt-1" onclick="EMP.revert()">${icon("revert", 16)} تراجع</button>` : ""}`;
   }
 
   function advance() {
@@ -144,7 +146,7 @@ const EMP = (() => {
     const fileName = $("#wfFile")?.value?.trim();
     Store.advanceDeed(currentDeed, fileName);
     const done = Store.deed(currentDeed).step >= DataGen.STEP_COUNT;
-    toast(done ? "🎉 اكتمل توثيق الصك بنجاح" : "تم إنجاز الخطوة");
+    toast(done ? "اكتمل توثيق الصك بنجاح" : "تم إنجاز الخطوة");
     renderWF(); renderStats(); renderDeeds();
   }
   function revert() {

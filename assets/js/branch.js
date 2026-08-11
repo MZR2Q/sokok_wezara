@@ -22,14 +22,15 @@ const BR = (() => {
     const s = Store.branchStats(branchId);
     $("#navNew").textContent = s.new;
     const cards = [
-      ["st-total","📜",s.total,"إجمالي الصكوك"],
-      ["st-done","✅",s.done,"منتهية"],
-      ["st-prog","⏳",s.prog,"جارٍ العمل"],
-      ["st-idle","💤",s.idle + s.new,"خاملة / غير موزّعة"],
+      ["st-total","file",s.total,"إجمالي الصكوك"],
+      ["st-done","checkCircle",s.done,"منتهية"],
+      ["st-prog","clock",s.prog,"جارٍ العمل"],
+      ["st-idle","moon",s.idle + s.new,"خاملة / غير موزّعة"],
     ];
-    $("#statCards").innerHTML = cards.map(([c,ic,v,l]) => `
-      <div class="stat ${c}"><div class="st-top"><div class="st-ic">${ic}</div></div>
-        <div class="st-value mono">${fmt(v)}</div><div class="st-label">${l}</div></div>`).join("");
+    $("#statCards").innerHTML = cards.map(([c,ic,v,l],i) => `
+      <div class="stat ${c} reveal" style="--i:${i}"><div class="st-top"><div class="st-ic">${icon(ic,22)}</div></div>
+        <div class="st-value mono" data-count="${v}">0</div><div class="st-label">${l}</div></div>`).join("");
+    animateCounters($("#statCards"));
   }
 
   function renderTeam() {
@@ -65,21 +66,21 @@ const BR = (() => {
     const slice = list.slice((page - 1) * perPage, page * perPage);
     const emps = Store.employeesOf(branchId);
 
-    $("#deedRows").innerHTML = slice.map((d) => {
+    $("#deedRows").innerHTML = slice.map((d, i) => {
       const st = Store.statusOf(d);
       const emp = d.assignedEmployeeId ? Store.employee(d.assignedEmployeeId) : null;
-      return `<tr>
+      return `<tr class="reveal-row" style="--i:${i}">
         <td data-label="تحديد"><input type="checkbox" class="rowChk" value="${d.id}" ${selected.has(d.id) ? "checked" : ""} onclick="BR.toggleRow('${d.id}',this)"></td>
         <td data-label="رقم الصك" class="mono t-strong">${d.id}</td>
         <td data-label="المسجد / الجهة"><div class="t-strong">${d.mosque}</div><div class="t-sub">${d.city}</div></td>
         <td data-label="الحي">${d.district || "—"}</td>
         <td data-label="الموظف المسؤول">${emp ? `<div class="cell-branch"><div class="branch-ic" style="width:28px;height:28px;font-size:.72rem">${initials(emp.name)}</div>${emp.name}</div>`
-                  : `<button class="btn sm gold" onclick="BR.openAssign('${d.id}')">إسناد لموظف</button>`}</td>
+                  : `<button class="btn sm gold" onclick="BR.openAssign('${d.id}')">${icon("userCheck", 15)} إسناد لموظف</button>`}</td>
         <td data-label="الحالة">${badgeHTML(st)}</td>
         <td data-label="التقدّم">${progressHTML(Store.pctOf(d))}</td>
         <td data-label="آخر تحديث" class="t-sub">${timeAgo(d.updatedAt)}</td>
       </tr>`;
-    }).join("") || `<tr><td colspan="8"><div class="empty"><div class="em-ic">📭</div>لا توجد صكوك بهذا التصنيف</div></td></tr>`;
+    }).join("") || `<tr><td colspan="8"><div class="empty"><div class="em-ic">${icon("inbox", 34)}</div>لا توجد صكوك بهذا التصنيف</div></td></tr>`;
 
     $("#countInfo").textContent = `عرض ${slice.length} من ${fmt(list.length)} صك`;
     renderPager(pages);

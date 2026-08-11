@@ -22,26 +22,27 @@
       <div class="avatar" id="uAvatar">ف</div>
       <div class="u-meta"><b id="uName">الفرع</b><span>مدير فرع</span></div>
     </div>
-    <button class="btn-logout" onclick="Store.clearSession(); location.href='index.html'">خروج ⎋</button>
+    <button class="btn-logout" onclick="Store.clearSession(); location.href='index.html'"><span class="i-svg" data-icon="logout" data-size="17"></span><span class="txt">خروج</span></button>
   </header>
 
   <div class="app-shell">
     <div class="nav-overlay" id="navOverlay"></div>
     <aside class="sidebar" id="sidebar">
       <div class="side-label">القائمة</div>
-      <a class="side-link active"><span class="ic">📋</span> صكوك الفرع</a>
-      <a class="side-link" onclick="BR.filterTab('new')"><span class="ic">📥</span> بانتظار التوزيع
+      <a class="side-link active"><span class="ic" data-icon="clipboard"></span> صكوك الفرع</a>
+      <a class="side-link" onclick="BR.filterTab('new')"><span class="ic" data-icon="inbox"></span> بانتظار التوزيع
         <span class="badge-count" id="navNew">0</span></a>
-      <a class="side-link" onclick="BR.scrollTo('team')"><span class="ic">👥</span> فريق العمل</a>
+      <a class="side-link" onclick="BR.scrollTo('team')"><span class="ic" data-icon="users"></span> فريق العمل</a>
       <div class="side-branch-note">
-        💡 حدّد صكوكاً من الجدول ثم أسندها لأحد الموظفين دفعة واحدة.
+        <span class="ic" data-icon="bulb" data-size="18"></span>
+        <span>حدّد صكوكاً من الجدول ثم أسندها لأحد الموظفين دفعة واحدة.</span>
       </div>
     </aside>
 
     <main class="main">
       <div class="page-head">
         <div class="crumb" id="crumb">المركز الرئيسي / الفرع</div>
-        <h1 id="pageTitle">لوحة الفرع 🏢</h1>
+        <h1 id="pageTitle">لوحة الفرع</h1>
         <p>الصكوك المسندة من المركز الرئيسي — وزّعها على موظفي التوثيق وتابع تقدّمها.</p>
       </div>
 
@@ -49,7 +50,7 @@
 
       <!-- فريق العمل -->
       <section class="card mt-3" id="team">
-        <div class="card-head"><h3>👥 فريق العمل وتوزيع الصكوك</h3></div>
+        <div class="card-head"><h3><span class="i-svg" data-icon="users" data-size="18"></span> فريق العمل وتوزيع الصكوك</h3></div>
         <div class="table-wrap">
           <table class="data">
             <thead><tr><th>الموظف</th><th>الدور</th><th>إجمالي</th><th>منتهٍ</th><th>جارٍ</th><th>خامل</th><th>نسبة الإنجاز</th></tr></thead>
@@ -60,10 +61,10 @@
 
       <!-- جدول الصكوك -->
       <section class="card mt-3">
-        <div class="card-head"><h3>📜 صكوك الفرع</h3></div>
+        <div class="card-head"><h3><span class="i-svg" data-icon="file" data-size="18"></span> صكوك الفرع</h3></div>
         <div class="card-pad">
           <div class="toolbar">
-            <div class="search"><span class="s-ic">🔍</span>
+            <div class="search"><span class="s-ic" data-icon="search" data-size="17"></span>
               <input class="input" id="search" placeholder="بحث برقم الصك أو اسم المسجد..." /></div>
             <button class="chip active" data-f="all" onclick="BR.setFilter('all',this)">الكل</button>
             <button class="chip" data-f="new" onclick="BR.setFilter('new',this)">غير موزّع</button>
@@ -76,7 +77,7 @@
             <div><b id="selCount">0</b> صك محدّد</div>
             <div class="row center-y">
               <select class="select" id="bulkEmp" style="min-width:220px"></select>
-              <button class="btn primary" onclick="BR.doBulkAssign()">إسناد للمحدّد</button>
+              <button class="btn primary" onclick="BR.doBulkAssign()"><span class="i-svg" data-icon="userCheck" data-size="17"></span> إسناد للمحدّد</button>
             </div>
           </div>
 
@@ -102,7 +103,7 @@
   <!-- نافذة إسناد صك مفرد -->
   <div class="modal-backdrop" id="assignModal">
     <div class="modal">
-      <div class="modal-head"><h3>إسناد الصك لموظف</h3><button class="x-close" data-close>&times;</button></div>
+      <div class="modal-head"><h3>إسناد الصك لموظف</h3><button class="x-close" data-close><span class="i-svg" data-icon="x" data-size="18"></span></button></div>
       <div class="modal-body">
         <div class="kv"><span class="k">رقم الصك</span><span class="v" id="amDeed"></span></div>
         <div class="kv mb-2"><span class="k">المسجد</span><span class="v" id="amMosque"></span></div>
@@ -118,6 +119,8 @@
   <script src="assets/js/data.js"></script>
   <script src="assets/js/store.js"></script>
   <script src="assets/js/utils.js"></script>
+  <script src="assets/js/icons.js"></script>
+  <script src="assets/js/anim.js"></script>
   <script src="assets/js/branch.js"></script>
 </body>
 </html>

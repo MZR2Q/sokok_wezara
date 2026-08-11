@@ -26,7 +26,7 @@
       <div class="avatar">و</div>
       <div class="u-meta"><b>المركز الرئيسي</b><span>صلاحية كاملة</span></div>
     </div>
-    <button class="btn-logout" onclick="Store.clearSession(); location.href='index.html'">خروج ⎋</button>
+    <button class="btn-logout" onclick="Store.clearSession(); location.href='index.html'"><span class="i-svg" data-icon="logout" data-size="17"></span><span class="txt">خروج</span></button>
   </header>
 
   <div class="app-shell">
@@ -34,17 +34,18 @@
     <!-- القائمة الجانبية -->
     <aside class="sidebar" id="sidebar">
       <div class="side-label">القائمة الرئيسية</div>
-      <a class="side-link active"><span class="ic">📊</span> اللوحة الرئيسية</a>
-      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="ic">🏢</span> الفروع
+      <a class="side-link active"><span class="ic" data-icon="grid"></span> اللوحة الرئيسية</a>
+      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="ic" data-icon="building"></span> الفروع
         <span class="badge-count" id="navBranches">0</span></a>
-      <a class="side-link" onclick="HQ.openAssign()"><span class="ic">➕</span> إسناد صكوك جديدة</a>
+      <a class="side-link" onclick="HQ.openAssign()"><span class="ic" data-icon="plus"></span> إسناد صكوك جديدة</a>
       <div class="side-label mt-3">الحالات</div>
-      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="ic" style="color:var(--st-done)">●</span> منتهية</a>
-      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="ic" style="color:var(--st-prog)">●</span> جارٍ العمل</a>
-      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="ic" style="color:var(--st-idle)">●</span> خاملة</a>
+      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="dotc" style="background:var(--st-done)"></span> منتهية</a>
+      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="dotc" style="background:var(--st-prog)"></span> جارٍ العمل</a>
+      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="dotc" style="background:var(--st-idle)"></span> خاملة</a>
 
       <div class="side-branch-note">
-        💡 اضغط على أي فرع في الجدول لعرض توزيع صكوكه على الموظفين.
+        <span class="ic" data-icon="bulb" data-size="18"></span>
+        <span>اضغط على أي فرع في الجدول لعرض توزيع صكوكه على الموظفين.</span>
       </div>
     </aside>
 
@@ -54,10 +55,10 @@
         <div class="crumb">الرئيسية / لوحة المتابعة العامة</div>
         <div class="row between center-y wrap">
           <div>
-            <h1>لوحة المتابعة العامة 🕌</h1>
+            <h1>لوحة المتابعة العامة</h1>
             <p>نظرة شاملة على أداء الفروع في توثيق صكوك المساجد.</p>
           </div>
-          <button class="btn primary" onclick="HQ.openAssign()">➕ إسناد صكوك لفرع</button>
+          <button class="btn primary" onclick="HQ.openAssign()"><span class="i-svg" data-icon="plus" data-size="18"></span> إسناد صكوك لفرع</button>
         </div>
       </div>
 
@@ -68,7 +69,7 @@
       <section class="grid cols-2 mt-3">
         <div class="card">
           <div class="card-head">
-            <h3>📈 أداء الفروع (توثيق الصكوك)</h3>
+            <h3><span class="i-svg" data-icon="trend" data-size="18"></span> أداء الفروع (توثيق الصكوك)</h3>
             <div class="legend">
               <span class="lg"><span class="sw sw-done"></span> منتهٍ</span>
               <span class="lg"><span class="sw sw-prog"></span> جارٍ</span>
@@ -78,7 +79,7 @@
           <div class="card-pad"><div class="bars" id="branchBars"></div></div>
         </div>
         <div class="card">
-          <div class="card-head"><h3>🧭 توزيع الحالات</h3></div>
+          <div class="card-head"><h3><span class="i-svg" data-icon="pie" data-size="18"></span> توزيع الحالات</h3></div>
           <div class="card-pad center" id="donutWrap"></div>
         </div>
       </section>
@@ -86,10 +87,10 @@
       <!-- جدول الفروع -->
       <section class="card mt-3" id="branches">
         <div class="card-head">
-          <h3>🏢 الفروع (<span id="branchCount">0</span>)</h3>
+          <h3><span class="i-svg" data-icon="building" data-size="18"></span> الفروع (<span id="branchCount">0</span>)</h3>
           <div class="toolbar" style="margin:0">
             <div class="search">
-              <span class="s-ic">🔍</span>
+              <span class="s-ic" data-icon="search" data-size="17"></span>
               <input class="input" id="branchSearch" placeholder="بحث باسم الفرع أو المدينة..." />
             </div>
           </div>
@@ -115,7 +116,7 @@
     <div class="modal wide">
       <div class="modal-head">
         <h3 id="bmTitle">تفاصيل الفرع</h3>
-        <button class="x-close" data-close>&times;</button>
+        <button class="x-close" data-close><span class="i-svg" data-icon="x" data-size="18"></span></button>
       </div>
       <div class="modal-body" id="bmBody"></div>
     </div>
@@ -124,7 +125,7 @@
   <!-- نافذة: إسناد صكوك جديدة -->
   <div class="modal-backdrop" id="assignModal">
     <div class="modal">
-      <div class="modal-head"><h3>➕ إسناد دفعة صكوك جديدة لفرع</h3><button class="x-close" data-close>&times;</button></div>
+      <div class="modal-head"><h3><span class="i-svg" data-icon="plus" data-size="18"></span> إسناد دفعة صكوك جديدة لفرع</h3><button class="x-close" data-close><span class="i-svg" data-icon="x" data-size="18"></span></button></div>
       <div class="modal-body">
         <div class="field">
           <label>الفرع (الجهة المستقبِلة)</label>
@@ -150,6 +151,8 @@
   <script src="assets/js/data.js"></script>
   <script src="assets/js/store.js"></script>
   <script src="assets/js/utils.js"></script>
+  <script src="assets/js/icons.js"></script>
+  <script src="assets/js/anim.js"></script>
   <script src="assets/js/hq.js"></script>
 </body>
 </html>

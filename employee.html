@@ -22,37 +22,38 @@
       <div class="avatar" id="uAvatar">م</div>
       <div class="u-meta"><b id="uName">الموظف</b><span id="uBranch">فرع</span></div>
     </div>
-    <button class="btn-logout" onclick="Store.clearSession(); location.href='index.html'">خروج ⎋</button>
+    <button class="btn-logout" onclick="Store.clearSession(); location.href='index.html'"><span class="i-svg" data-icon="logout" data-size="17"></span><span class="txt">خروج</span></button>
   </header>
 
   <div class="app-shell">
     <div class="nav-overlay" id="navOverlay"></div>
     <aside class="sidebar" id="sidebar">
       <div class="side-label">مهامي</div>
-      <a class="side-link active"><span class="ic">📋</span> الصكوك المسندة إليّ</a>
-      <a class="side-link" onclick="EMP.setFilter('prog',document.querySelector('[data-f=prog]'))"><span class="ic">⏳</span> جارٍ العمل
+      <a class="side-link active"><span class="ic" data-icon="clipboard"></span> الصكوك المسندة إليّ</a>
+      <a class="side-link" onclick="EMP.setFilter('prog',document.querySelector('[data-f=prog]'))"><span class="ic" data-icon="clock"></span> جارٍ العمل
         <span class="badge-count" id="navProg">0</span></a>
-      <a class="side-link" onclick="EMP.setFilter('idle',document.querySelector('[data-f=idle]'))"><span class="ic">💤</span> لم تبدأ
+      <a class="side-link" onclick="EMP.setFilter('idle',document.querySelector('[data-f=idle]'))"><span class="ic" data-icon="moon"></span> لم تبدأ
         <span class="badge-count" id="navIdle">0</span></a>
       <div class="side-branch-note">
-        💡 افتح أي صك لتنفيذ خطوات التوثيق خطوة بخطوة حتى إرفاق الصك النهائي.
+        <span class="ic" data-icon="bulb" data-size="18"></span>
+        <span>افتح أي صك لتنفيذ خطوات التوثيق خطوة بخطوة حتى إرفاق الصك النهائي.</span>
       </div>
     </aside>
 
     <main class="main">
       <div class="page-head">
         <div class="crumb" id="crumb">الفرع / مهامي</div>
-        <h1>الصكوك المسندة إليّ 📋</h1>
+        <h1>الصكوك المسندة إليّ</h1>
         <p>نفّذ مسار التوثيق لكل صك: من مراجعة الجهة حتى اعتماد الوزارة وإرفاق الصك النهائي.</p>
       </div>
 
       <section class="grid stat-grid" id="statCards"></section>
 
       <section class="card mt-3">
-        <div class="card-head"><h3>📜 قائمة الصكوك</h3></div>
+        <div class="card-head"><h3><span class="i-svg" data-icon="file" data-size="18"></span> قائمة الصكوك</h3></div>
         <div class="card-pad">
           <div class="toolbar">
-            <div class="search"><span class="s-ic">🔍</span>
+            <div class="search"><span class="s-ic" data-icon="search" data-size="17"></span>
               <input class="input" id="search" placeholder="بحث برقم الصك أو المسجد..." /></div>
             <button class="chip active" data-f="all" onclick="EMP.setFilter('all',this)">الكل</button>
             <button class="chip" data-f="idle" onclick="EMP.setFilter('idle',this)">لم تبدأ</button>
@@ -76,13 +77,13 @@
     <div class="modal wide">
       <div class="modal-head">
         <h3 id="wfTitle">مسار توثيق الصك</h3>
-        <button class="x-close" data-close>&times;</button>
+        <button class="x-close" data-close><span class="i-svg" data-icon="x" data-size="18"></span></button>
       </div>
       <div class="modal-body">
         <div class="grid cols-2">
           <div>
             <div class="card card-pad mb-2" id="wfInfo"></div>
-            <h3 class="mb-2">🧭 مسار العمل</h3>
+            <h3 class="mb-2"><span class="i-svg" data-icon="route" data-size="18"></span> مسار العمل</h3>
             <div class="stepper" id="wfSteps"></div>
           </div>
           <div>
@@ -96,6 +97,8 @@
   <script src="assets/js/data.js"></script>
   <script src="assets/js/store.js"></script>
   <script src="assets/js/utils.js"></script>
+  <script src="assets/js/icons.js"></script>
+  <script src="assets/js/anim.js"></script>
   <script src="assets/js/employee.js"></script>
 </body>
 </html>

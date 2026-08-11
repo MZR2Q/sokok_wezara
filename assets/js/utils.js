@@ -81,7 +81,7 @@ function toast(msg, ok = true) {
   let t = $("#toast");
   if (!t) { t = el("div", { id: "toast", class: "toast" }); document.body.append(t); }
   t.className = "toast" + (ok ? " ok" : "");
-  t.innerHTML = `<span>${ok ? "✓" : "⚠"}</span><span>${msg}</span>`;
+  t.innerHTML = `${icon(ok ? "checkCircle" : "x", 18)}<span>${msg}</span>`;
   requestAnimationFrame(() => t.classList.add("show"));
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => t.classList.remove("show"), 2600);

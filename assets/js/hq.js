@@ -9,18 +9,22 @@ const HQ = (() => {
   function renderStats() {
     const g = Store.globalStats();
     const cards = [
-      { cls: "st-total", ic: "📜", value: g.total, label: "إجمالي الصكوك", sub: `${Store.branches().length} فرع` },
-      { cls: "st-done",  ic: "✅", value: g.done,  label: "صكوك منتهية",  sub: `${g.activePct}% نسبة الإنجاز` },
-      { cls: "st-prog",  ic: "⏳", value: g.prog,  label: "جارٍ العمل",   sub: "قيد التوثيق" },
-      { cls: "st-idle",  ic: "💤", value: g.idle + g.new, label: "خاملة / غير موزّعة", sub: `${g.new} بانتظار التوزيع` },
+      { cls: "st-total", ic: "file",        value: g.total, label: "إجمالي الصكوك", sub: `${Store.branches().length} فرع`, trend: null },
+      { cls: "st-done",  ic: "checkCircle", value: g.done,  label: "صكوك منتهية",  sub: "مكتملة التوثيق", trend: `${g.activePct}%` },
+      { cls: "st-prog",  ic: "clock",       value: g.prog,  label: "جارٍ العمل",   sub: "قيد التوثيق", trend: null },
+      { cls: "st-idle",  ic: "moon",        value: g.idle + g.new, label: "خاملة / غير موزّعة", sub: `${fmt(g.new)} بانتظار التوزيع`, trend: null },
     ];
-    $("#statCards").innerHTML = cards.map((c) => `
-      <div class="stat ${c.cls}">
-        <div class="st-top"><div class="st-ic">${c.ic}</div></div>
-        <div class="st-value mono">${fmt(c.value)}</div>
+    $("#statCards").innerHTML = cards.map((c, i) => `
+      <div class="stat ${c.cls} reveal" style="--i:${i}">
+        <div class="st-top">
+          <div class="st-ic">${icon(c.ic, 22)}</div>
+          ${c.trend ? `<span class="st-trend">${icon("trend", 13)} ${c.trend}</span>` : ""}
+        </div>
+        <div class="st-value mono" data-count="${c.value}">0</div>
         <div class="st-label">${c.label}</div>
         <div class="st-sub">${c.sub}</div>
       </div>`).join("");
+    animateCounters($("#statCards"));
   }
 
   /* ---------- مخطط أعمدة الفروع ---------- */
@@ -53,27 +57,27 @@ const HQ = (() => {
       { v: idle,   c: "var(--st-idle)", label: "خامل" },
     ];
     const total = g.total || 1;
-    const R = 52, C = 2 * Math.PI * R;
+    const R = 54, C = 2 * Math.PI * R;
     let offset = 0;
     const rings = parts.map((p) => {
       const frac = p.v / total;
-      const seg = `<circle r="${R}" cx="70" cy="70" fill="none" stroke="${p.c}" stroke-width="22"
+      const seg = `<circle r="${R}" cx="70" cy="70" fill="none" stroke="${p.c}" stroke-width="16"
         stroke-dasharray="${frac * C} ${C}" stroke-dashoffset="${-offset * C}"
-        transform="rotate(-90 70 70)"></circle>`;
+        transform="rotate(-90 70 70)" stroke-linecap="round"></circle>`;
       offset += frac;
       return seg;
     }).join("");
     const legend = parts.map((p) =>
-      `<div class="kv"><span class="k"><span class="sw" style="display:inline-block;width:11px;height:11px;border-radius:3px;background:${p.c};margin-inline-end:6px"></span>${p.label}</span>
-       <span class="v mono">${fmt(p.v)} (${Math.round((p.v / total) * 100)}%)</span></div>`).join("");
+      `<div class="kv"><span class="k"><span class="sw" style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${p.c};margin-inline-end:7px"></span>${p.label}</span>
+       <span class="v mono">${fmt(p.v)} · ${Math.round((p.v / total) * 100)}%</span></div>`).join("");
     $("#donutWrap").innerHTML = `
-      <svg viewBox="0 0 140 140" style="width:170px;height:170px">
-        <circle r="52" cx="70" cy="70" fill="none" stroke="var(--line)" stroke-width="22"></circle>
+      <svg class="donut-anim" viewBox="0 0 140 140" style="width:180px;height:180px">
+        <circle r="54" cx="70" cy="70" fill="none" stroke="var(--line-2)" stroke-width="16"></circle>
         ${rings}
-        <text x="70" y="66" text-anchor="middle" font-size="22" font-weight="800" fill="var(--ink)">${fmt(g.total)}</text>
-        <text x="70" y="86" text-anchor="middle" font-size="10" fill="var(--muted)">إجمالي الصكوك</text>
+        <text x="70" y="66" text-anchor="middle" font-size="24" font-weight="700" fill="var(--ink)">${fmt(g.total)}</text>
+        <text x="70" y="86" text-anchor="middle" font-size="9.5" fill="var(--muted)">إجمالي الصكوك</text>
       </svg>
-      <div style="text-align:right;margin-top:12px">${legend}</div>`;
+      <div style="text-align:right;margin-top:14px">${legend}</div>`;
   }
 
   /* ---------- جدول الفروع ---------- */
@@ -83,9 +87,9 @@ const HQ = (() => {
     $("#branchCount").textContent = Store.branches().length;
     $("#navBranches").textContent = Store.branches().length;
 
-    $("#branchRows").innerHTML = list.map((b) => {
+    $("#branchRows").innerHTML = list.map((b, i) => {
       const s = Store.branchStats(b.id);
-      return `<tr class="clickable" onclick="HQ.openBranch('${b.id}')">
+      return `<tr class="clickable reveal-row" style="--i:${i}" onclick="HQ.openBranch('${b.id}')">
         <td data-label="الفرع"><div class="cell-branch"><div class="branch-ic">${b.code}</div>
           <div><div class="t-strong">${b.name}</div><div class="t-sub">${Store.employeesOf(b.id).length} موظفين</div></div></div></td>
         <td data-label="المدينة">${b.city}</td>
@@ -95,9 +99,9 @@ const HQ = (() => {
         <td data-label="خامل" class="mono" style="color:var(--st-idle)">${fmt(s.idle)}</td>
         <td data-label="غير موزّع" class="mono muted">${fmt(s.new)}</td>
         <td data-label="نسبة الإنجاز">${progressHTML(s.activePct)}</td>
-        <td data-label=""><button class="btn sm ghost">عرض ↵</button></td>
+        <td data-label=""><button class="btn sm ghost">${icon("arrow", 16)} عرض</button></td>
       </tr>`;
-    }).join("") || `<tr><td colspan="9"><div class="empty"><div class="em-ic">🔍</div>لا توجد نتائج مطابقة</div></td></tr>`;
+    }).join("") || `<tr><td colspan="9"><div class="empty"><div class="em-ic">${icon("search", 34)}</div>لا توجد نتائج مطابقة</div></td></tr>`;
   }
 
   /* ---------- نافذة تفاصيل الفرع ---------- */
@@ -105,7 +109,7 @@ const HQ = (() => {
     const b = Store.branch(branchId);
     const s = Store.branchStats(branchId);
     const emps = Store.employeesOf(branchId);
-    $("#bmTitle").innerHTML = `🏢 ${b.name} <span class="tag-pill">${b.code}</span>`;
+    $("#bmTitle").innerHTML = `${icon("building", 20)} ${b.name} <span class="tag-pill">${b.code}</span>`;
 
     const empRows = emps.map((e) => {
       const list = Store.deedsOfEmployee(e.id);
@@ -125,13 +129,13 @@ const HQ = (() => {
 
     $("#bmBody").innerHTML = `
       <div class="grid stat-grid mb-3">
-        ${miniStat("st-total","📜",s.total,"إجمالي")}
-        ${miniStat("st-done","✅",s.done,"منتهٍ")}
-        ${miniStat("st-prog","⏳",s.prog,"جارٍ")}
-        ${miniStat("st-idle","💤",s.idle,"خامل")}
+        ${miniStat("st-total","file",s.total,"إجمالي")}
+        ${miniStat("st-done","checkCircle",s.done,"منتهٍ")}
+        ${miniStat("st-prog","clock",s.prog,"جارٍ")}
+        ${miniStat("st-idle","moon",s.idle,"خامل")}
       </div>
-      ${unassigned ? `<div class="side-branch-note mb-3">📌 يوجد <b>${fmt(unassigned)}</b> صك غير موزّع على الموظفين في هذا الفرع.</div>` : ""}
-      <h3 class="mb-2">👥 الصكوك موزّعة على الموظفين</h3>
+      ${unassigned ? `<div class="side-branch-note mb-3">${icon("inbox", 18)}<span>يوجد <b>${fmt(unassigned)}</b> صك غير موزّع على الموظفين في هذا الفرع.</span></div>` : ""}
+      <h3 class="mb-2">${icon("users", 18)} الصكوك موزّعة على الموظفين</h3>
       <div class="table-wrap card">
         <table class="data">
           <thead><tr><th>الموظف</th><th>إجمالي</th><th>منتهٍ</th><th>جارٍ</th><th>خامل</th><th>نسبة الإنجاز</th></tr></thead>
@@ -139,10 +143,11 @@ const HQ = (() => {
         </table>
       </div>`;
     openModal("branchModal");
+    animateCounters($("#bmBody"));
   }
   const miniStat = (cls, ic, v, l) => `
-    <div class="stat ${cls}"><div class="st-top"><div class="st-ic">${ic}</div></div>
-      <div class="st-value mono">${fmt(v)}</div><div class="st-label">${l}</div></div>`;
+    <div class="stat ${cls}"><div class="st-top"><div class="st-ic">${icon(ic, 20)}</div></div>
+      <div class="st-value mono" data-count="${v}">0</div><div class="st-label">${l}</div></div>`;
 
   /* ---------- إسناد صكوك جديدة ---------- */
   function openAssign() {

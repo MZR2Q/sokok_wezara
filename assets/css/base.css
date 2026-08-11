@@ -1,58 +1,56 @@
 /* ==========================================================================
-   base.css — المتغيرات، إعادة الضبط، الطباعة، الهوية البصرية
+   base.css — نظام تصميم عصري (Design tokens) + إعادة ضبط + حركات
    نظام متابعة الصكوك
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap");
 
 :root {
-  /* ألوان الهوية — مستوحاة من هوية وزارة الشؤون الإسلامية */
-  --brand:        #0b6b3b;
-  --brand-dark:   #075129;
-  --brand-600:    #0d7a44;
-  --brand-050:    #e8f3ec;
-  --brand-100:    #d2e8da;
+  /* ---------- الهوية (أخضر عصري) ---------- */
+  --brand:        #0e7a4e;
+  --brand-600:    #0c8a55;
+  --brand-dark:   #0a5f3d;
+  --brand-050:    #eaf6f0;
+  --brand-100:    #d3ecdf;
 
   --gold:         #c8a44d;
   --gold-dark:    #a5842f;
   --gold-050:     #faf3df;
 
-  /* ألوان محايدة */
-  --ink:          #16241c;
-  --ink-2:        #3f5147;
-  --muted:        #7a8a80;
-  --line:         #e2e8e4;
-  --bg:           #f4f7f5;
+  /* ---------- محايدات (رمادي بارد نظيف) ---------- */
+  --ink:          #0f1a15;
+  --ink-2:        #495a51;
+  --muted:        #8a988f;
+  --line:         #edf0ee;
+  --line-2:       #e3e8e5;
+  --bg:           #f6f8f7;
   --surface:      #ffffff;
-  --surface-2:    #f9fbfa;
+  --surface-2:    #f7f9f8;
 
-  /* ألوان الحالات */
-  --st-done:      #1f9d55;
-  --st-done-bg:   #e6f6ec;
-  --st-prog:      #2b6cb0;
-  --st-prog-bg:   #e6f0f9;
-  --st-idle:      #c98a1e;
-  --st-idle-bg:   #fbf1dc;
-  --st-new:       #6b7280;
-  --st-new-bg:    #eef0f2;
-  --danger:       #c0392b;
+  /* ---------- حالات ---------- */
+  --st-done:      #12a150;   --st-done-bg:   #e9f8ef;
+  --st-prog:      #2f6feb;   --st-prog-bg:   #eaf1fe;
+  --st-idle:      #d98a0b;   --st-idle-bg:   #fdf3e0;
+  --st-new:       #6b7a86;   --st-new-bg:    #eef2f4;
+  --danger:       #dc3545;
 
-  /* أبعاد وظلال */
-  --radius:       14px;
-  --radius-sm:    9px;
+  /* ---------- أبعاد وظلال (خفيفة/عصرية) ---------- */
+  --radius:       16px;
+  --radius-sm:    11px;
   --radius-lg:    22px;
-  --shadow-sm:    0 1px 2px rgba(16, 40, 28, .06), 0 1px 3px rgba(16, 40, 28, .05);
-  --shadow:       0 4px 16px rgba(16, 40, 28, .08);
-  --shadow-lg:    0 18px 50px rgba(16, 40, 28, .18);
-  --header-h:     66px;
-  --sidebar-w:    252px;
+  --shadow-sm:    0 1px 2px rgba(16, 40, 28, .04);
+  --shadow:       0 6px 22px -8px rgba(16, 40, 28, .12);
+  --shadow-lg:    0 24px 60px -18px rgba(16, 40, 28, .28);
+  --ring:         0 0 0 4px var(--brand-050);
+  --header-h:     64px;
+  --sidebar-w:    250px;
 
-  --font: "Tajawal", "Segoe UI", Tahoma, Arial, sans-serif;
+  --ease:         cubic-bezier(.22, .8, .28, 1);
+  --font: "IBM Plex Sans Arabic", "Tajawal", "Segoe UI", Tahoma, Arial, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
 body {
   font-family: var(--font);
@@ -63,25 +61,29 @@ body {
   text-align: right;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: -.1px;
 }
 
-h1, h2, h3, h4 { font-weight: 800; color: var(--ink); line-height: 1.3; }
-h1 { font-size: 1.6rem; }
-h2 { font-size: 1.25rem; }
-h3 { font-size: 1.05rem; }
+h1, h2, h3, h4 { font-weight: 700; color: var(--ink); line-height: 1.3; letter-spacing: -.4px; }
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.2rem; }
+h3 { font-size: 1rem; }
 a { color: var(--brand-600); text-decoration: none; }
-a:hover { text-decoration: underline; }
+a:hover { text-decoration: none; }
+img { max-width: 100%; }
+button, input, select, textarea { font-family: inherit; font-size: 1rem; color: inherit; }
 
-img, svg { max-width: 100%; }
-
-button, input, select, textarea { font-family: inherit; font-size: 1rem; }
-
+::selection { background: var(--brand-100); }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-thumb { background: #cdd8d1; border-radius: 20px; }
-::-webkit-scrollbar-thumb:hover { background: #b6c4bb; }
+::-webkit-scrollbar-thumb { background: #d7ded9; border-radius: 20px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: #c2cdc6; background-clip: padding-box; }
 
-/* أدوات مساعدة */
-.container { max-width: 1240px; margin-inline: auto; padding-inline: 20px; }
+/* ---------- أيقونات SVG خطية ---------- */
+.i-svg { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; line-height: 0; }
+.i-svg svg { display: block; }
+
+/* ---------- أدوات مساعدة ---------- */
+.container { max-width: 1280px; margin-inline: auto; padding-inline: 20px; }
 .muted { color: var(--muted); }
 .small { font-size: .82rem; }
 .center { text-align: center; }
@@ -97,3 +99,22 @@ button, input, select, textarea { font-family: inherit; font-size: 1rem; }
 
 .mt-1{margin-top:8px}.mt-2{margin-top:16px}.mt-3{margin-top:24px}.mt-4{margin-top:32px}
 .mb-1{margin-bottom:8px}.mb-2{margin-bottom:16px}.mb-3{margin-bottom:24px}
+
+/* ==========================================================================
+   الحركات (Animations)
+   ========================================================================== */
+@keyframes fadeUp   { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop      { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes growX    { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes shimmer  { 100% { transform: translateX(-100%); } }
+@keyframes spin     { to { transform: rotate(360deg); } }
+
+/* ظهور متدرّج — يُضبط التأخير عبر المتغيّر --i */
+.reveal { opacity: 0; animation: fadeUp .5s var(--ease) forwards; animation-delay: calc(var(--i, 0) * 55ms); }
+.reveal-row { opacity: 0; animation: fadeUp .38s var(--ease) forwards; animation-delay: calc(var(--i, 0) * 28ms); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-delay: 0ms !important; transition-duration: .001ms !important; }
+  html { scroll-behavior: auto; }
+}
