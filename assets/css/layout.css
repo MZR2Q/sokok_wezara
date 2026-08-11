@@ -14,7 +14,7 @@
   padding-inline: 20px;
 }
 .app-header .brand-lockup { display: flex; align-items: center; gap: 11px; }
-.app-header .brand-lockup img { width: 38px; height: 38px; }
+.app-header .brand-lockup img { width: auto; height: 40px; object-fit: contain; }
 .app-header .brand-text b { display: block; font-size: .98rem; line-height: 1.2; font-weight: 700; }
 .app-header .brand-text span { display: block; font-size: .7rem; color: var(--muted); }
 
@@ -141,7 +141,7 @@
 @media (max-width: 640px) {
   :root { --header-h: 58px; }
   .app-header { gap: 8px; padding-inline: 12px; }
-  .app-header .brand-lockup img { width: 32px; height: 32px; }
+  .app-header .brand-lockup img { width: auto; height: 34px; }
   .app-header .brand-text { display: none; }
   .app-header .sys-name { margin-inline-start: 0; padding-inline-start: 0; border-inline-start: 0; font-size: .92rem; font-weight: 700; color: var(--ink); }
   .header-user { border: 0; padding: 2px; gap: 0; }
