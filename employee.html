@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة الموظف — نظام متابعة الصكوك</title>
+  <link rel="icon" href="assets/img/logo.svg" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand-lockup">
+      <img src="assets/img/logo.svg" alt="شعار الوزارة" />
+      <div class="brand-text"><b>وزارة الشؤون الإسلامية</b><span>والدعوة والإرشاد</span></div>
+    </div>
+    <div class="sys-name">نظام متابعة الصكوك</div>
+    <div class="header-spacer"></div>
+    <div class="header-user">
+      <div class="avatar" id="uAvatar">م</div>
+      <div class="u-meta"><b id="uName">الموظف</b><span id="uBranch">فرع</span></div>
+    </div>
+    <button class="btn-logout" onclick="Store.clearSession(); location.href='index.html'">خروج ⎋</button>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="side-label">مهامي</div>
+      <a class="side-link active"><span class="ic">📋</span> الصكوك المسندة إليّ</a>
+      <a class="side-link" onclick="EMP.setFilter('prog',document.querySelector('[data-f=prog]'))"><span class="ic">⏳</span> جارٍ العمل
+        <span class="badge-count" id="navProg">0</span></a>
+      <a class="side-link" onclick="EMP.setFilter('idle',document.querySelector('[data-f=idle]'))"><span class="ic">💤</span> لم تبدأ
+        <span class="badge-count" id="navIdle">0</span></a>
+      <div class="side-branch-note">
+        💡 افتح أي صك لتنفيذ خطوات التوثيق خطوة بخطوة حتى إرفاق الصك النهائي.
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="page-head">
+        <div class="crumb" id="crumb">الفرع / مهامي</div>
+        <h1>الصكوك المسندة إليّ 📋</h1>
+        <p>نفّذ مسار التوثيق لكل صك: من مراجعة الجهة حتى اعتماد الوزارة وإرفاق الصك النهائي.</p>
+      </div>
+
+      <section class="grid stat-grid" id="statCards"></section>
+
+      <section class="card mt-3">
+        <div class="card-head"><h3>📜 قائمة الصكوك</h3></div>
+        <div class="card-pad">
+          <div class="toolbar">
+            <div class="search"><span class="s-ic">🔍</span>
+              <input class="input" id="search" placeholder="بحث برقم الصك أو المسجد..." /></div>
+            <button class="chip active" data-f="all" onclick="EMP.setFilter('all',this)">الكل</button>
+            <button class="chip" data-f="idle" onclick="EMP.setFilter('idle',this)">لم تبدأ</button>
+            <button class="chip" data-f="prog" onclick="EMP.setFilter('prog',this)">جارٍ</button>
+            <button class="chip" data-f="done" onclick="EMP.setFilter('done',this)">منتهٍ</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>رقم الصك</th><th>المسجد / الجهة</th><th>الحي</th><th>المرحلة الحالية</th><th style="min-width:150px">التقدّم</th><th>الحالة</th><th></th></tr></thead>
+              <tbody id="deedRows"></tbody>
+            </table>
+          </div>
+          <div class="small muted mt-2" id="countInfo"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- نافذة مسار العمل -->
+  <div class="modal-backdrop" id="wfModal">
+    <div class="modal wide">
+      <div class="modal-head">
+        <h3 id="wfTitle">مسار توثيق الصك</h3>
+        <button class="x-close" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid cols-2">
+          <div>
+            <div class="card card-pad mb-2" id="wfInfo"></div>
+            <h3 class="mb-2">🧭 مسار العمل</h3>
+            <div class="stepper" id="wfSteps"></div>
+          </div>
+          <div>
+            <div class="card card-pad" id="wfAction"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/employee.js"></script>
+</body>
+</html>

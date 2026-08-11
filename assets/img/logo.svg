@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="شعار الوزارة">
+  <defs>
+    <linearGradient id="g-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e6c66e"/>
+      <stop offset="1" stop-color="#b8912f"/>
+    </linearGradient>
+  </defs>
+  <!-- إطار دائري -->
+  <circle cx="60" cy="60" r="56" fill="#0b6b3b"/>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#g-gold)" stroke-width="3"/>
+  <circle cx="60" cy="60" r="47" fill="none" stroke="url(#g-gold)" stroke-width="1" opacity="0.6"/>
+
+  <!-- نخلة -->
+  <g fill="url(#g-gold)">
+    <rect x="58.4" y="58" width="3.2" height="20" rx="1.4"/>
+    <path d="M60 34c6 4 9 10 9 16-4-3-7-4-9-4 3-6 0-8 0-12z"/>
+    <path d="M60 34c-6 4-9 10-9 16 4-3 7-4 9-4-3-6 0-8 0-12z"/>
+    <path d="M60 38c8 1 13 5 16 11-5-2-9-2-12-1 2-5-2-8-4-10z"/>
+    <path d="M60 38c-8 1-13 5-16 11 5-2 9-2 12-1-2-5 2-8 4-10z"/>
+    <path d="M60 44c9-1 15 2 19 8-6-1-10 0-13 2 1-6-4-8-6-10z"/>
+    <path d="M60 44c-9-1-15 2-19 8 6-1 10 0 13 2-1-6 4-8 6-10z"/>
+  </g>
+
+  <!-- مصحف مفتوح -->
+  <g>
+    <path d="M32 82c9-6 19-6 28 0 9-6 19-6 28 0-9-3-19-3-28 2-9-5-19-5-28-2z" fill="url(#g-gold)"/>
+    <path d="M60 84c-8-4-17-4-25-1V96c8-3 17-3 25 1z" fill="#fbf6e7"/>
+    <path d="M60 84c8-4 17-4 25-1V96c-8-3-17-3-25 1z" fill="#f2e9cf"/>
+    <g stroke="#b8912f" stroke-width="0.8" opacity="0.8">
+      <line x1="40" y1="87" x2="55" y2="89"/>
+      <line x1="40" y1="90" x2="55" y2="92"/>
+      <line x1="65" y1="89" x2="80" y2="87"/>
+      <line x1="65" y1="92" x2="80" y2="90"/>
+    </g>
+  </g>
+</svg>

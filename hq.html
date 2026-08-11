@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المركز الرئيسي — نظام متابعة الصكوك</title>
+  <link rel="icon" href="assets/img/logo.svg" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+</head>
+<body>
+  <!-- الترويسة -->
+  <header class="app-header">
+    <div class="brand-lockup">
+      <img src="assets/img/logo.svg" alt="شعار الوزارة" />
+      <div class="brand-text">
+        <b>وزارة الشؤون الإسلامية</b>
+        <span>والدعوة والإرشاد</span>
+      </div>
+    </div>
+    <div class="sys-name">نظام متابعة الصكوك</div>
+    <div class="header-spacer"></div>
+    <div class="header-user">
+      <div class="avatar">و</div>
+      <div class="u-meta"><b>المركز الرئيسي</b><span>صلاحية كاملة</span></div>
+    </div>
+    <button class="btn-logout" onclick="Store.clearSession(); location.href='index.html'">خروج ⎋</button>
+  </header>
+
+  <div class="app-shell">
+    <!-- القائمة الجانبية -->
+    <aside class="sidebar">
+      <div class="side-label">القائمة الرئيسية</div>
+      <a class="side-link active"><span class="ic">📊</span> اللوحة الرئيسية</a>
+      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="ic">🏢</span> الفروع
+        <span class="badge-count" id="navBranches">0</span></a>
+      <a class="side-link" onclick="HQ.openAssign()"><span class="ic">➕</span> إسناد صكوك جديدة</a>
+      <div class="side-label mt-3">الحالات</div>
+      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="ic" style="color:var(--st-done)">●</span> منتهية</a>
+      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="ic" style="color:var(--st-prog)">●</span> جارٍ العمل</a>
+      <a class="side-link" onclick="HQ.scrollTo('branches')"><span class="ic" style="color:var(--st-idle)">●</span> خاملة</a>
+
+      <div class="side-branch-note">
+        💡 اضغط على أي فرع في الجدول لعرض توزيع صكوكه على الموظفين.
+      </div>
+    </aside>
+
+    <!-- المحتوى -->
+    <main class="main">
+      <div class="page-head">
+        <div class="crumb">الرئيسية / لوحة المتابعة العامة</div>
+        <div class="row between center-y wrap">
+          <div>
+            <h1>لوحة المتابعة العامة 🕌</h1>
+            <p>نظرة شاملة على أداء الفروع في توثيق صكوك المساجد.</p>
+          </div>
+          <button class="btn primary" onclick="HQ.openAssign()">➕ إسناد صكوك لفرع</button>
+        </div>
+      </div>
+
+      <!-- بطاقات الإحصائيات -->
+      <section class="grid stat-grid" id="statCards"></section>
+
+      <!-- مخطط الفروع + توزيع الحالات -->
+      <section class="grid cols-2 mt-3">
+        <div class="card">
+          <div class="card-head">
+            <h3>📈 أداء الفروع (توثيق الصكوك)</h3>
+            <div class="legend">
+              <span class="lg"><span class="sw sw-done"></span> منتهٍ</span>
+              <span class="lg"><span class="sw sw-prog"></span> جارٍ</span>
+              <span class="lg"><span class="sw sw-idle"></span> خامل</span>
+            </div>
+          </div>
+          <div class="card-pad"><div class="bars" id="branchBars"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>🧭 توزيع الحالات</h3></div>
+          <div class="card-pad center" id="donutWrap"></div>
+        </div>
+      </section>
+
+      <!-- جدول الفروع -->
+      <section class="card mt-3" id="branches">
+        <div class="card-head">
+          <h3>🏢 الفروع (<span id="branchCount">0</span>)</h3>
+          <div class="toolbar" style="margin:0">
+            <div class="search">
+              <span class="s-ic">🔍</span>
+              <input class="input" id="branchSearch" placeholder="بحث باسم الفرع أو المدينة..." />
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>الفرع</th><th>المدينة</th><th>إجمالي الصكوك</th>
+                <th>منتهٍ</th><th>جارٍ</th><th>خامل</th><th>غير موزّع</th>
+                <th style="min-width:170px">نسبة الإنجاز</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="branchRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- نافذة: تفاصيل الفرع -->
+  <div class="modal-backdrop" id="branchModal">
+    <div class="modal wide">
+      <div class="modal-head">
+        <h3 id="bmTitle">تفاصيل الفرع</h3>
+        <button class="x-close" data-close>&times;</button>
+      </div>
+      <div class="modal-body" id="bmBody"></div>
+    </div>
+  </div>
+
+  <!-- نافذة: إسناد صكوك جديدة -->
+  <div class="modal-backdrop" id="assignModal">
+    <div class="modal">
+      <div class="modal-head"><h3>➕ إسناد دفعة صكوك جديدة لفرع</h3><button class="x-close" data-close>&times;</button></div>
+      <div class="modal-body">
+        <div class="field">
+          <label>الفرع (الجهة المستقبِلة)</label>
+          <select class="select" id="asBranch"></select>
+        </div>
+        <div class="field">
+          <label>عدد الصكوك</label>
+          <input class="input" id="asCount" type="number" min="1" max="5000" value="30" />
+          <div class="small muted mt-1">مثال: 30، أو 3000، أو 4000 صك.</div>
+        </div>
+        <div class="field">
+          <label>وصف الجهة / دفعة الصكوك (اختياري)</label>
+          <input class="input" id="asMosque" placeholder="مثال: مساجد حي النزهة" />
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn primary" id="asConfirm">تأكيد الإسناد</button>
+        <button class="btn ghost" data-close>إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/hq.js"></script>
+</body>
+</html>

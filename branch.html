@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة الفرع — نظام متابعة الصكوك</title>
+  <link rel="icon" href="assets/img/logo.svg" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand-lockup">
+      <img src="assets/img/logo.svg" alt="شعار الوزارة" />
+      <div class="brand-text"><b>وزارة الشؤون الإسلامية</b><span>والدعوة والإرشاد</span></div>
+    </div>
+    <div class="sys-name">نظام متابعة الصكوك</div>
+    <div class="header-spacer"></div>
+    <div class="header-user">
+      <div class="avatar" id="uAvatar">ف</div>
+      <div class="u-meta"><b id="uName">الفرع</b><span>مدير فرع</span></div>
+    </div>
+    <button class="btn-logout" onclick="Store.clearSession(); location.href='index.html'">خروج ⎋</button>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="side-label">القائمة</div>
+      <a class="side-link active"><span class="ic">📋</span> صكوك الفرع</a>
+      <a class="side-link" onclick="BR.filterTab('new')"><span class="ic">📥</span> بانتظار التوزيع
+        <span class="badge-count" id="navNew">0</span></a>
+      <a class="side-link" onclick="BR.scrollTo('team')"><span class="ic">👥</span> فريق العمل</a>
+      <div class="side-branch-note">
+        💡 حدّد صكوكاً من الجدول ثم أسندها لأحد الموظفين دفعة واحدة.
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="page-head">
+        <div class="crumb" id="crumb">المركز الرئيسي / الفرع</div>
+        <h1 id="pageTitle">لوحة الفرع 🏢</h1>
+        <p>الصكوك المسندة من المركز الرئيسي — وزّعها على موظفي التوثيق وتابع تقدّمها.</p>
+      </div>
+
+      <section class="grid stat-grid" id="statCards"></section>
+
+      <!-- فريق العمل -->
+      <section class="card mt-3" id="team">
+        <div class="card-head"><h3>👥 فريق العمل وتوزيع الصكوك</h3></div>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th>الموظف</th><th>الدور</th><th>إجمالي</th><th>منتهٍ</th><th>جارٍ</th><th>خامل</th><th>نسبة الإنجاز</th></tr></thead>
+            <tbody id="teamRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- جدول الصكوك -->
+      <section class="card mt-3">
+        <div class="card-head"><h3>📜 صكوك الفرع</h3></div>
+        <div class="card-pad">
+          <div class="toolbar">
+            <div class="search"><span class="s-ic">🔍</span>
+              <input class="input" id="search" placeholder="بحث برقم الصك أو اسم المسجد..." /></div>
+            <button class="chip active" data-f="all" onclick="BR.setFilter('all',this)">الكل</button>
+            <button class="chip" data-f="new" onclick="BR.setFilter('new',this)">غير موزّع</button>
+            <button class="chip" data-f="idle" onclick="BR.setFilter('idle',this)">خامل</button>
+            <button class="chip" data-f="prog" onclick="BR.setFilter('prog',this)">جارٍ</button>
+            <button class="chip" data-f="done" onclick="BR.setFilter('done',this)">منتهٍ</button>
+          </div>
+
+          <div class="row between center-y mb-2" id="bulkBar" style="display:none">
+            <div><b id="selCount">0</b> صك محدّد</div>
+            <div class="row center-y">
+              <select class="select" id="bulkEmp" style="min-width:220px"></select>
+              <button class="btn primary" onclick="BR.doBulkAssign()">إسناد للمحدّد</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr>
+                <th style="width:34px"><input type="checkbox" id="chkAll" onclick="BR.toggleAll(this)"></th>
+                <th>رقم الصك</th><th>المسجد / الجهة</th><th>الحي</th>
+                <th>الموظف المسؤول</th><th>الحالة</th><th style="min-width:150px">التقدّم</th><th>آخر تحديث</th>
+              </tr></thead>
+              <tbody id="deedRows"></tbody>
+            </table>
+          </div>
+          <div class="row between center-y mt-2">
+            <div class="small muted" id="countInfo"></div>
+            <div class="row" id="pager"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- نافذة إسناد صك مفرد -->
+  <div class="modal-backdrop" id="assignModal">
+    <div class="modal">
+      <div class="modal-head"><h3>إسناد الصك لموظف</h3><button class="x-close" data-close>&times;</button></div>
+      <div class="modal-body">
+        <div class="kv"><span class="k">رقم الصك</span><span class="v" id="amDeed"></span></div>
+        <div class="kv mb-2"><span class="k">المسجد</span><span class="v" id="amMosque"></span></div>
+        <div class="field"><label>اختر الموظف</label><select class="select" id="amEmp"></select></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn primary" id="amConfirm">تأكيد الإسناد</button>
+        <button class="btn ghost" data-close>إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/branch.js"></script>
+</body>
+</html>
